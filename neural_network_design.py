@@ -1,8 +1,6 @@
-# Try various number of hidden nodes and see what performs best
-for i in range(5, 50, 5):
-    nn = OCRNeuralNetwork(i, data_matrix, data_labels, train_indices, False)
-    performance = str(test(data_matrix, data_labels, test_indices, nn))
-    print('{i}Hidden Nodes: {val}'.format(i=i, val=performance))
+import numpy as np
+from ocr import OCRNeuralNetwork
+from sklearn.model_selection import train_test_split
 
 
 def test(data_matrix, data_labels, test_indices, nn):
@@ -21,3 +19,21 @@ def test(data_matrix, data_labels, test_indices, nn):
         avg_sum += (correct_guess_count / float(len(test_indices)))
     
     return avg_sum / 100
+
+# Load data samples and labels into matrix
+data_matrix = np.loadtxt(open('data/data.csv', 'rb'), delimiter=',').tolist()
+data_labels = np.loadtxt(open('data/dataLabels.csv', 'rb')).tolist()
+
+# Create training and testing sets
+train_indices, test_indices = train_test_split(list(range(5000)))
+
+print(">>>>>>>>>>> PERFORMANCE <<<<<<<<<<<")
+print("-----------------------------------")
+
+# Try various number of hidden nodes and see what performs best
+for i in range(5, 50, 5):
+    nn = OCRNeuralNetwork(i, data_matrix, data_labels, train_indices, False)
+    performance = str(test(data_matrix, data_labels, test_indices, nn))
+    print('{i} Hidden Nodes: {val}'.format(i=i, val=performance))
+
+print("-----------------------------------")
